@@ -122,7 +122,7 @@ function handleCgroupPath(key, ce, dir) {
     if (dir !== '/') {
       cgroupPath[key] = ce.mountPoint + dir;
     } else {
-      cgroupPath[key] = mountPoint;
+      cgroupPath[key] = ce.mountPoint;
     }
   } else {
     if (ce.root === dir) {
