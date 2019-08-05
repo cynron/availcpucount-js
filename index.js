@@ -9,13 +9,17 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+const debugEnabled = 'AVAIL_CPU_COUNT_DEBUG' in process.env ? true : false;
+
 function getCgroupMouts() {
   var ces = {};
   var mounts;
   try {
     mounts = fs.readFileSync('/proc/self/mountinfo', {encoding: 'utf8'}).split('\n');
   } catch (e) {
-    console.error('read /proc/self/mountinfo error: ', e);
+    if (debugEnabled) {
+      console.error('read /proc/self/mountinfo error: ', e);
+    }
     return
   }
 
@@ -82,7 +86,9 @@ function initCgroupPath() {
   try {
     var cgroups = fs.readFileSync('/proc/self/cgroup', {encoding: 'utf8'}).split('\n');
   } catch (e) {
-    console.error('read /proc/self/cgroup error: ', e);
+    if (debugEnabled) {
+      console.error('read /proc/self/cgroup error: ', e);
+    }
     return;
   }
 
@@ -148,7 +154,9 @@ function getCgroupIntValue(key, subpath) {
   try {
     var content = fs.readFileSync(filename, {encoding: 'utf8'});
   } catch (e) {
-    console.error('read file ' + filename + ' error: ', e);
+    if (debugEnabled) {
+      console.error('read file ' + filename + ' error: ', e);
+    }
     return -1;
   }
 
@@ -168,6 +176,10 @@ function availCpuCount() {
   var shareCount;
   var quotaCount;
   var cpuShares = getCgroupIntValue('cpu', 'cpu.shares');
+  if (debugEnabled) {
+      console.error('cpuShares is: ', cpuShares);
+  }
+
   if (cpuShares !== -1) {
     shareCount = Math.ceil(cpuShares / 1024);
   } else {
@@ -176,6 +188,10 @@ function availCpuCount() {
 
   var quota = getCgroupIntValue('cpu', 'cpu.cfs_quota_us');
   var period = getCgroupIntValue('cpu', 'cpu.cfs_period_us');
+
+  if (debugEnabled) {
+      console.error('cpu quota & period: ', quota, period);
+  }
 
   if (quota > -1 && period > 0) {
     quotaCount = Math.ceil(quota / period);
