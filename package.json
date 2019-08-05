@@ -1,0 +1,26 @@
+{
+  "name": "availcpucount-js",
+  "preferGlobal": true,
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=0.12"
+  },
+  "author": {
+    "name": "Wang Xinyong",
+    "email": "wang.xy.chn@gmail.com"
+  },
+  "description": "Retrieve available cpu count for nodejs running in container.",
+  "main": "index.js",
+  "keywords": [
+    "docker",
+    "container",
+    "cgroup",
+    "clustering",
+    "cluster",
+    "devops",
+    "dev ops"
+  ],
+  "dependencies": {
+  },
+  "license": "MIT License"
+}
